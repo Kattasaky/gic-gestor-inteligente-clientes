@@ -122,3 +122,12 @@ Autor
 
 Proyecto desarrollado por Katherine Vergara (2026).
 
+## Evidencia de ejecución (CLI)
+
+La siguiente captura muestra la ejecución del flujo completo:
+- Crear cliente
+- Listar clientes
+- Editar cliente
+- Eliminar cliente
+
+![Ejecución del sistema](docs/capturas/demo_1.png)
