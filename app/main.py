@@ -1,42 +1,74 @@
 from services.gestor_clientes import GestorClientes
+from utils.excepciones import ClienteNoEncontradoError
+
+
+def mostrar_menu():
+    print("\n=== GESTOR INTELIGENTE DE CLIENTES ===")
+    print("1. Crear cliente")
+    print("2. Listar clientes")
+    print("3. Buscar cliente por email")
+    print("4. Editar cliente")
+    print("5. Eliminar cliente")
+    print("0. Salir")
 
 
 def main():
     gestor = GestorClientes()
 
-    # 1) Crear cliente
-    gestor.crear_cliente(
-        tipo="Premium",
-        nombre="Katta",
-        email="katta@gmail.com",
-        telefono="+56912345678",
-        direccion="Av. Siempre Viva 123"
-    )
+    while True:
+        mostrar_menu()
+        opcion = input("Seleccione una opción: ").strip()
 
-    # 2) Listar
-    print("\nLISTA CLIENTES:")
-    for c in gestor.listar_clientes():
-        print(c)
+        try:
+            if opcion == "1":
+                tipo = input("Tipo (Regular/Premium/Corporativo): ")
+                nombre = input("Nombre: ")
+                email = input("Email: ")
+                telefono = input("Teléfono: ")
+                direccion = input("Dirección: ")
 
-    # 3) Editar
-    gestor.editar_cliente(
-        email="katta@gmail.com",
-        tipo="Corporativo",
-        nombre="Katta Actualizada",
-        telefono="+56987654321",
-        direccion="Nueva Dirección 999"
-    )
+                gestor.crear_cliente(tipo, nombre, email, telefono, direccion)
+                print("Cliente creado correctamente.")
 
-    print("\nLISTA CLIENTES (ACTUALIZADA):")
-    for c in gestor.listar_clientes():
-        print(c)
+            elif opcion == "2":
+                clientes = gestor.listar_clientes()
+                if not clientes:
+                    print("No hay clientes registrados.")
+                else:
+                    for c in clientes:
+                        print(c)
 
-    # 4) Eliminar
-    gestor.eliminar_cliente("katta@gmail.com")
+            elif opcion == "3":
+                email = input("Ingrese email: ")
+                cliente = gestor.buscar_cliente(email)
+                print(cliente)
 
-    print("\nLISTA CLIENTES (DESPUÉS DE ELIMINAR):")
-    for c in gestor.listar_clientes():
-        print(c)
+            elif opcion == "4":
+                email = input("Email del cliente a editar: ")
+                tipo = input("Nuevo tipo (Regular/Premium/Corporativo): ")
+                nombre = input("Nuevo nombre: ")
+                telefono = input("Nuevo teléfono: ")
+                direccion = input("Nueva dirección: ")
+
+                gestor.editar_cliente(email, tipo, nombre, telefono, direccion)
+                print("Cliente actualizado.")
+
+            elif opcion == "5":
+                email = input("Email del cliente a eliminar: ")
+                gestor.eliminar_cliente(email)
+                print("Cliente eliminado.")
+
+            elif opcion == "0":
+                print("Saliendo del sistema...")
+                break
+
+            else:
+                print("Opción inválida.")
+
+        except ClienteNoEncontradoError as e:
+            print("Error:", e)
+        except Exception as e:
+            print("Error inesperado:", e)
 
 
 if __name__ == "__main__":
